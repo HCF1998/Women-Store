@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 @Data
@@ -17,6 +14,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @TableName(value = "user")
+@Builder
 public class User {
 
     @TableId(value = "userId",type = IdType.AUTO)
