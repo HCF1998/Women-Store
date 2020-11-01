@@ -17,20 +17,27 @@ import lombok.experimental.Accessors;
 @Builder
 public class User {
 
-    @TableId(value = "userId",type = IdType.AUTO)
+    @TableId(value = "user_Id",type = IdType.AUTO)
     private Integer userId;
-    @TableField(value = "userAcount")
+
+    @TableField(value = "user_Acount")
     private String userAcount;
-    @TableField(value = "userName")
+
+    @TableField(value = "user_Name")
     private String userName;
-    @TableField(value = "userPhone")
+
+    @TableField(value = "user_Phone")
     private String userPhone;
-    @TableField(value = "userPriority")
+
+    @TableField(value = "user_Priority")
     private Integer userPriority;
-    @TableField(value = "userAddress")
+
+    @TableField(value = "user_Address")
     private String userAddress;
-    @TableField(value = "userPassword")
+
+    @TableField(value = "user_Password")
     private String userPassword;
-    @TableField(value = "userStatus")
+
+    @TableField(value = "user_Status")
     private Integer userStatus;
 }
