@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class Result<T> {
     /**
-     * 业务错误码
+     * 状态码
      */
     private Integer code;
     /**
@@ -19,23 +19,21 @@ public class Result<T> {
      */
     private T data;
 
-    private Result(ResultStatus resultStatus,T data){
-        this.code = resultStatus.getCode();
-        this.message = resultStatus.getMessage();
+    public Result(T data) {
+        this(ResultCode.SUCCESS,data);
+    }
+
+    public Result(ResultCode resultCode, T data) {
+        this.code = resultCode.getCode();
+        this.message = resultCode.getMessage();
         this.data = data;
     }
 
-    /**
-     * 业务成功返回业务代码和描述信息
-     */
-    public static Result<Void> success(){
-        return new Result<Void>(ResultStatus.SUCCESS,null);
+    public Result(int code,String message,T data){
+        this.code = code;
+        this.message = message;
+        this.data = data;
     }
 
-    /**
-     * 业务成功返回业务代码和描述信息、返回参数
-     */
-    public static <T> Result<T> success(T data){
-        return new Result<>(ResultStatus.SUCCESS,data);
-    }
+
 }
