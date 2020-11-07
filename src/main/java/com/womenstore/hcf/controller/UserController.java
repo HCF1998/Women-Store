@@ -3,6 +3,7 @@ package com.womenstore.hcf.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.user.User;
 import com.womenstore.hcf.util.Result;
@@ -78,12 +79,24 @@ public class UserController {
      * 用户登录
      */
     @PostMapping("/userLogin")
-    public String userLogin(@RequestBody JSONObject jsonObject){
+    public Result userLogin(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:{}",jsonObject);
+        String jsonToString = jsonObject.toString();
+        String newS = jsonToString.replace("{",":");
+        System.out.println(newS);
         String loginAcount = (String) jsonObject.get("userAcount");
         String loginPassword =(String)jsonObject.get("userPassword");
-        if (StringUtils.isNotBlank(loginAcount)&&StringUtils.isNotBlank(loginPassword)){
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        qw.eq("user_Acount",loginAcount);
+        User hadUser = userMapper.selectOne(qw);
+        if (hadUser!=null){
+            if (hadUser.getUserPriority()==1){
+                return new Result(200,"该用户为管理员","admin.jsp");
+            }else if (hadUser.getUserPriority()==0){
+                return new Result(200,"该用户为普通用户","index.jsp");
+            }
         }
+        return new Result(404,"无此账号信息",null);
     }
 
     /**
