@@ -1,4 +1,4 @@
-package com.womenstore.hcf.controller;
+package com.womenstore.hcf.controller.admin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/admin/product")
+public class AdminProductController {
 
     @Autowired
     private ProductMapper productMapper;
