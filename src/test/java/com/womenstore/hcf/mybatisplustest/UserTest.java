@@ -15,6 +15,6 @@ public class UserTest {
     @Test
     public void findAll(){
        List<User> users = mapper.selectList(null);
-    users.forEach(user -> System.out.println("user="+user));
+    users.forEach(user -> System.out.println("generaluser="+user));
     }
 }

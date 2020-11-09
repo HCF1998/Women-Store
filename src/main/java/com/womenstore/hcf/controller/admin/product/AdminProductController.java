@@ -1,4 +1,4 @@
-package com.womenstore.hcf.controller.admin;
+package com.womenstore.hcf.controller.admin.product;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

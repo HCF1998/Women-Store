@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Accessors(chain = true)
+//@Accessors(chain = true)
 @TableName(value = "user")
 @Builder
 public class User {

@@ -1,4 +1,4 @@
-package com.womenstore.hcf.controller;
+package com.womenstore.hcf.controller.generaluser.user;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -10,20 +10,25 @@ import com.womenstore.hcf.requestentity.user.UserLoginReq;
 import com.womenstore.hcf.requestentity.user.UserRegisterReq;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
+import com.womenstore.hcf.util.UuidCode;
+import com.womenstore.hcf.util.entity.Login;
+import com.womenstore.hcf.util.utilMapper.LoginMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/generalUser/user")
 @Slf4j
-public class UserController {
+public class GeneralUserController {
 
-  @Autowired private UserMapper userMapper;
+  @Autowired
+  private UserMapper userMapper;
 
+  @Autowired
+  private LoginMapper loginMapper;
     /**
      * 注册用户
      * @param userRegisterReq
@@ -73,7 +78,18 @@ public class UserController {
     } else {
       return new Result(404, "无此账号信息或密码不正确", null);
     }
+    String loginUuid = UuidCode.generateUuid();
+    Login loginUser = new Login();
+    loginUser.setUserAcount(userLoginAcount);
+    loginUser.setLoginUuid(loginUuid);
+    loginMapper.insert(loginUser);
     return new Result(200,"普通用户登陆","index.jsp");
   }
+
+//  @GetMapping("/editUser")
+//  public Result editUser(){
+//
+//  }
+
 
 }

@@ -1,4 +1,4 @@
-package com.womenstore.hcf.controller.user;
+package com.womenstore.hcf.controller.admin.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.womenstore.hcf.dao.user.UserMapper;

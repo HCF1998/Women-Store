@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.womenstore.hcf.dao")
+@MapperScan("com.womenstore.hcf.util")
 public class HcfApplication {
 
     public static void main(String[] args) {
