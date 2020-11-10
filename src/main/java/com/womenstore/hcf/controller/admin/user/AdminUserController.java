@@ -1,9 +1,12 @@
 package com.womenstore.hcf.controller.admin.user;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.user.UserMapper;
+import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.entity.user.User;
 import com.womenstore.hcf.util.Result;
+import com.womenstore.hcf.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,12 +76,9 @@ public class AdminUserController {
     @GetMapping("/banUsers")
     public Result banUsers(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:[{}]", jsonObject.toJSONString());
-        String banUserId = (String) jsonObject.get("banUserId");
-        Integer banUserStatus = (Integer) jsonObject.get("banStatusValue");
-        User banUser = userMapper.selectById(banUserId);
-        banUser.setUserStatus(banUserStatus);
-        userMapper.updateById(banUser);
-        return new Result(200, "封禁用户：" + banUserId + "，不可使用", null);
+        getBanUser(jsonObject);
+        return new Result(ResultCode.SUCCESS,
+                "成功封禁用户Id:"+jsonObject.get("userAcount"));
     }
 
     /**
@@ -89,11 +89,23 @@ public class AdminUserController {
     @GetMapping("/unbanUsers")
     public Result unbanUsers(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:[{}]", jsonObject.toJSONString());
-        String unBanUserId = (String)jsonObject.get("unBanUserId");
-        Integer unBanUserStatus = (Integer)jsonObject.get("unBanStatusValue");
-        User unBanUser = userMapper.selectById(unBanUserId);
-        unBanUser.setUserStatus(unBanUserStatus);
-        userMapper.updateById(unBanUser);
-        return new Result(200,"用户："+unBanUserId+",已解禁，可正常使用",null);
+        getBanUser(jsonObject);
+        return new Result(ResultCode.SUCCESS,
+                "成功解禁用户Id:"+jsonObject.get("userAcount"));
+    }
+
+    private void getBanUser(@RequestBody JSONObject jsonObject) {
+        String userId = (String) jsonObject.get("userAcount");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_Acount",userId);
+        User user  = userMapper.selectOne(queryWrapper);
+        Integer status =(Integer)jsonObject.get("userStatus");
+        if (status==1){
+            user.setUserStatus(1);
+            userMapper.updateById(user);
+        }else if (status==0){
+            user.setUserStatus(0);
+            userMapper.updateById(user);
+        }
     }
 }

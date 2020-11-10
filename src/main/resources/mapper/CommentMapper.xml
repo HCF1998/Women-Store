@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.womenstore.hcf.dao.comment.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.womenstore.hcf.entity.comment.Comment">
+    <!--@mbg.generated-->
+    <!--@Table `comment`-->
+    <id column="comment_Id" jdbcType="INTEGER" property="commentId" />
+    <result column="user_Id" jdbcType="INTEGER" property="userId" />
+    <result column="user_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="product_Id" jdbcType="INTEGER" property="productId" />
+    <result column="comment_Detail" jdbcType="VARCHAR" property="commentDetail" />
+    <result column="bought_Image" jdbcType="VARCHAR" property="boughtImage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    comment_Id, user_Id, user_Name, product_Id, comment_Detail, bought_Image
+  </sql>
+</mapper>

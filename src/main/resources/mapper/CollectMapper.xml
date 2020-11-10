@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.womenstore.hcf.dao.collect.CollectMapper">
+  <resultMap id="BaseResultMap" type="com.womenstore.hcf.entity.collect.Collect">
+    <!--@mbg.generated-->
+    <!--@Table `collect`-->
+    <id column="collect_Id" jdbcType="INTEGER" property="collectId" />
+    <result column="user_Id" jdbcType="INTEGER" property="userId" />
+    <result column="product_Id" jdbcType="INTEGER" property="productId" />
+    <result column="collect_Time" jdbcType="TIMESTAMP" property="collectTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    collect_Id, user_Id, product_Id, collect_Time
+  </sql>
+</mapper>

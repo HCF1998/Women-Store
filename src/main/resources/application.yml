@@ -7,3 +7,8 @@ spring:
     username: root
     password: root
 
+#logging:
+#  level:
+#    root:warn
+#
+

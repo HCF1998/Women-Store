@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.womenstore.hcf.dao.cart.CartMapper">
+  <resultMap id="BaseResultMap" type="com.womenstore.hcf.entity.cart.Cart">
+    <!--@mbg.generated-->
+    <!--@Table cart-->
+    <id column="cart_Id" jdbcType="INTEGER" property="cartId" />
+    <result column="user_Id" jdbcType="INTEGER" property="userId" />
+    <result column="product_Id" jdbcType="INTEGER" property="productId" />
+    <result column="product_Num" jdbcType="INTEGER" property="productNum" />
+    <result column="product_Price" jdbcType="DECIMAL" property="productPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    cart_Id, user_Id, product_Id, product_Num, product_Price
+  </sql>
+</mapper>

@@ -8,7 +8,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class UserLoginReq implements Serializable {
+public class   UserLoginReq implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String userAcount;

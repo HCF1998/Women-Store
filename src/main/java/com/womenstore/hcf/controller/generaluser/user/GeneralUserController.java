@@ -1,7 +1,4 @@
 package com.womenstore.hcf.controller.generaluser.user;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.user.UserMapper;
@@ -43,8 +40,8 @@ public class GeneralUserController {
     if (hadUserRegister != null) {
       return new Result(ResultCode.BAD_REQUEST, "该账号已被注册");
     } else {
-      if (StringUtils.equals(userRegisterReq.getUserRegisterPassword(),
-              userRegisterReq.getUserRegisterPasswordConfirm()) == false) {
+      if (!StringUtils.equals(userRegisterReq.getUserRegisterPassword(),
+              userRegisterReq.getUserRegisterPasswordConfirm())) {
         return new Result(ResultCode.BAD_REQUEST, "密码和确认密码不一致，请重新填写");
       } else {
         User user = new User();
@@ -60,7 +57,7 @@ public class GeneralUserController {
 
   /**
    * 用户登录
-   * @param userLoginReq
+   * @param userLoginReq 登录实体
    * @return
    */
   @PostMapping("/userLogin")
@@ -78,6 +75,10 @@ public class GeneralUserController {
     } else {
       return new Result(404, "无此账号信息或密码不正确", null);
     }
+
+    /**
+     * 用户登录存入uuid
+     */
     String loginUuid = UuidCode.generateUuid();
     Login loginUser = new Login();
     loginUser.setUserAcount(userLoginAcount);
@@ -86,10 +87,33 @@ public class GeneralUserController {
     return new Result(200,"普通用户登陆","index.jsp");
   }
 
-//  @GetMapping("/editUser")
-//  public Result editUser(){
-//
-//  }
+  @GetMapping("/editUser")
+  public Result editUser(@RequestBody JSONObject jsonObject){
+    log.info("jsonObject:[{}]",jsonObject.toString());
+    String userAcount = (String) jsonObject.get("userAcount");
+    /**
+     * 用户登录校验
+     */
+    Boolean isLogin = checkLogin(userAcount);
+    if (!isLogin){
+      return new Result(ResultCode.FAILED,"请先登录");
+    }
+    return new Result(ResultCode.SUCCESS,"更新信息成功");
+  }
 
 
+  /**
+   * 校验用户是否登录
+   * @param userAcount 用户登录账号
+   * @return boolean
+   */
+  public Boolean checkLogin(String userAcount){
+    QueryWrapper queryWrapper = new QueryWrapper();
+    queryWrapper.eq("user_Acount",userAcount);
+    Login isLogin = loginMapper.selectOne(queryWrapper);
+    if (isLogin==null){
+      return false;
+    }
+    return true;
+  }
 }
