@@ -20,6 +20,9 @@ public class Orders {
     @TableId(value = "order_Id", type = IdType.AUTO)
     private Integer orderId;
 
+    @TableField(value = "order_No")
+    private String orderNo;
+
     @TableField(value = "order_CreateTime")
     private Date orderCreatetime;
 

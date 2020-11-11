@@ -79,7 +79,7 @@ public class GeneralUserController {
     /**
      * 用户登录存入uuid
      */
-    String loginUuid = UuidCode.generateUuid();
+    String loginUuid = UuidCode.generateLoginUuid();
     Login loginUser = new Login();
     loginUser.setUserAcount(userLoginAcount);
     loginUser.setLoginUuid(loginUuid);

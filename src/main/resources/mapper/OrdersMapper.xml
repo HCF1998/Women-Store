@@ -5,6 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table orders-->
     <id column="order_Id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_No" jdbcType="VARCHAR" property="orderNo" />
     <result column="order_CreateTime" jdbcType="TIMESTAMP" property="orderCreatetime" />
     <result column="order_Status" jdbcType="INTEGER" property="orderStatus" />
     <result column="order_PayTime" jdbcType="TIMESTAMP" property="orderPaytime" />
@@ -19,7 +20,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    order_Id, order_CreateTime, order_Status, order_PayTime, order_Sum, order_ProductNum, 
+    order_Id, order_No, order_CreateTime, order_Status, order_PayTime, order_Sum, order_ProductNum, 
     user_Id, user_Phone, user_Address, product_Id, product_Name, product_Price
   </sql>
 </mapper>

@@ -9,10 +9,7 @@ import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +40,13 @@ public class GeneralProductController {
             return new Result(ResultCode.BAD_REQUEST,noneProduct);
         }
         return new Result(ResultCode.SUCCESS,findProducts);
+    }
+
+    @GetMapping("/detail")
+    public Result detailProduct(@RequestBody JSONObject jsonObject){
+        log.info("jsonObject:[{}]",jsonObject.toString());
+        String productId = (String)jsonObject.get("productId");
+        Product product = productMapper.selectById(productId);
+        return new Result(ResultCode.SUCCESS,product);
     }
 }
