@@ -28,7 +28,7 @@ public class AdminProductController {
     @GetMapping("/findAll")
     public Result findAll(){
         List<Product> productList = productMapper.selectList(null);
-        return new Result(productList);
+        return new Result(ResultCode.SUCCESS,productList);
     }
 
     /**
