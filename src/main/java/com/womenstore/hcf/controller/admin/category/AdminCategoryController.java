@@ -57,6 +57,11 @@ public class AdminCategoryController {
         return new Result(ResultCode.SUCCESS,"成功删除分类");
     }
 
+    /**
+     * 修改分类信息
+     * @param jsonObject
+     * @return
+     */
     @PostMapping("/editCategory")
     public Result editCategory(@RequestBody JSONObject jsonObject){
         Integer categoryId = (Integer) jsonObject.get("categoryId");

@@ -31,6 +31,7 @@ public class GeneralUserController {
      * @param userRegisterReq
      * @return
      */
+    @PostMapping("/addUser")
   public Result addUser(@RequestBody UserRegisterReq userRegisterReq) {
     log.info("userRegisterReq:[{}]", userRegisterReq);
     String userRegisterAcount = userRegisterReq.getUserRegisterAcount();

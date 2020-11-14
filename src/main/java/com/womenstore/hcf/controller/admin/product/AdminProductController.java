@@ -55,6 +55,35 @@ public class AdminProductController {
     }
 
     /**
+     * 删除商品
+     * @param jsonObject
+     * @return
+     */
+    public Result deleteProduct(@RequestBody JSONObject jsonObject){
+        Integer productId = (Integer)jsonObject.get("productId");
+        String productName = (String)jsonObject.get("productName");
+        try{
+            productMapper.deleteById(productId);
+        }catch (Exception e){
+            log.info("exception:[{}]",e);
+        }
+        return new Result(ResultCode.SUCCESS,"成功删除商品【Id:"+productId+", productName："+productName);
+    }
+
+    /**
+     * 编辑商品信息
+     * @param product
+     * @return
+     */
+    public Result editProduct(@RequestBody Product product){
+        if (product.getProductId()!=null){
+            productMapper.updateById(product);
+            return new Result(ResultCode.SUCCESS,product);
+        }
+        return null;
+    }
+
+    /**
      * 上架商品
      * @param jsonObject
      * @return 统一返回体
@@ -76,6 +105,11 @@ public class AdminProductController {
         return getResult(jsonObject);
     }
 
+    /**
+     * 商品上下架抽成方法
+     * @param jsonObject
+     * @return
+     */
     private Result getResult(@RequestBody JSONObject jsonObject) {
         Integer productId = (Integer) jsonObject.get("productId");
         QueryWrapper queryWrapper = new QueryWrapper();
