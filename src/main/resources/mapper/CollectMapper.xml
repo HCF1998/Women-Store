@@ -8,9 +8,11 @@
     <result column="user_Id" jdbcType="INTEGER" property="userId" />
     <result column="product_Id" jdbcType="INTEGER" property="productId" />
     <result column="collect_Time" jdbcType="TIMESTAMP" property="collectTime" />
+    <result column="product_Name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_Price" jdbcType="DECIMAL" property="productPrice" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    collect_Id, user_Id, product_Id, collect_Time
+    collect_Id, user_Id, product_Id, collect_Time, product_Name, product_Price
   </sql>
 </mapper>

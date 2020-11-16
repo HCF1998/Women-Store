@@ -4,8 +4,10 @@ package com.womenstore.hcf.controller.generaluser.collect;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.collect.CollectMapper;
+import com.womenstore.hcf.dao.product.ProductMapper;
 import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.collect.Collect;
+import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ public class GeneralCollectController {
     private CollectMapper collectMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProductMapper productMapper;
 
     /**
      * 收藏商品
@@ -39,10 +43,15 @@ public class GeneralCollectController {
         Integer productId = (Integer)jsonObject.get("productId");
         Date addCollectDate = new Date();
         Collect addCollect = new Collect();
+        Product product = productMapper.selectById(productId);
+
         addCollect.setCollectTime(addCollectDate);
         addCollect.setUserId(userId);
         addCollect.setProductId(productId);
+        addCollect.setProductName(product.getProductName());
+        addCollect.setProductPrice(product.getProductPrice());
         collectMapper.insert(addCollect);
+
         return new Result(ResultCode.SUCCESS,"收藏商品成功");
     }
 
@@ -66,7 +75,8 @@ public class GeneralCollectController {
 
     @GetMapping("deleteCollect/{collectId}")
     public Result deleteCollect(@PathVariable("collectId")Integer collectId){
-        return null;
+        collectMapper.deleteById(collectId);
+        return new Result(ResultCode.SUCCESS,"取消成功");
     }
 
 }
