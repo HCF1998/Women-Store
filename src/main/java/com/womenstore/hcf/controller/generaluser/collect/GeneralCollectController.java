@@ -10,6 +10,9 @@ import com.womenstore.hcf.entity.collect.Collect;
 import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,8 @@ import java.util.List;
 /**
  * 用户商品收藏类
  */
+
+@Api
 @RestController
 @Slf4j
 @RequestMapping("/generalUser/collect")
@@ -31,13 +36,15 @@ public class GeneralCollectController {
     @Autowired
     private ProductMapper productMapper;
 
-    /**
-     * 收藏商品
-     * @param jsonObject
-     * @return
-     */
-    @PostMapping("/addCollect")
-    public Result addCollect(@RequestBody JSONObject jsonObject){
+  /**
+   * 收藏商品
+   *
+   * @param jsonObject
+   * @return
+   */
+  @ApiOperation("添加商品收藏")
+  @PostMapping("/addCollect")
+  public Result addCollect(@ApiParam("包含userId,productId") @RequestBody JSONObject jsonObject) {
         log.info("jsonObject:[{}]");
         Integer userId = (Integer)jsonObject.get("userId");
         Integer productId = (Integer)jsonObject.get("productId");
@@ -60,8 +67,9 @@ public class GeneralCollectController {
      * @param userId
      * @return
      */
+    @ApiOperation("查询收藏")
     @GetMapping("/findAllCollect/{userId}")
-    public Result findAllCollect(@PathVariable("userId")Integer userId){
+    public Result findAllCollect(@ApiParam("用户Id") @PathVariable("userId")Integer userId){
         log.info("userId:[{}]",userId);
         QueryWrapper qwCollect = new QueryWrapper();
         qwCollect.eq("user_Id",userId);
@@ -73,8 +81,9 @@ public class GeneralCollectController {
         }
     }
 
+    @ApiOperation("取消收藏")
     @GetMapping("deleteCollect/{collectId}")
-    public Result deleteCollect(@PathVariable("collectId")Integer collectId){
+    public Result deleteCollect(@ApiParam("收藏记录Id")@PathVariable("collectId")Integer collectId){
         collectMapper.deleteById(collectId);
         return new Result(ResultCode.SUCCESS,"取消成功");
     }

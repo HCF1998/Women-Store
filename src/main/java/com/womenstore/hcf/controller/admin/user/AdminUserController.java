@@ -7,6 +7,8 @@ import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.entity.user.User;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping("/admin/user")
 @Slf4j
@@ -28,6 +31,7 @@ public class AdminUserController {
      * 遍历用户
      * @return
      */
+    @ApiOperation("遍历用户")
     @GetMapping("/findAll")
     public Result finfAll(){
         List<User> userList = userMapper.selectList(null);
@@ -40,6 +44,7 @@ public class AdminUserController {
      * @param jsonObject
      * @return
      */
+    @ApiOperation("修改用户权限")
     @GetMapping("/changeUserPriority")
     public Result changeUserPriority(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:{}", jsonObject);
@@ -60,6 +65,7 @@ public class AdminUserController {
      * @param jsonObject
      * @return
      */
+    @ApiOperation("删除用户")
     @GetMapping("/deleteUser")
     public Result deleteUser(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:{}", jsonObject);
@@ -73,6 +79,7 @@ public class AdminUserController {
      * @param jsonObject
      * @return
      */
+    @ApiOperation("封禁用户")
     @GetMapping("/banUsers")
     public Result banUsers(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:[{}]", jsonObject.toJSONString());
@@ -86,6 +93,7 @@ public class AdminUserController {
      * @param jsonObject
      * @return
      */
+    @ApiOperation("解禁用户")
     @GetMapping("/unbanUsers")
     public Result unbanUsers(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:[{}]", jsonObject.toJSONString());

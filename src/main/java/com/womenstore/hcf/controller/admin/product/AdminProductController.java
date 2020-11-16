@@ -6,6 +6,8 @@ import com.womenstore.hcf.dao.product.ProductMapper;
 import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api
 @RestController
 @RequestMapping("/admin/product")
 @Slf4j
@@ -25,6 +28,7 @@ public class AdminProductController {
      * 查询所有商品
      * @return 统一返回体和数据结果集
      */
+    @ApiOperation("查询所有商品")
     @GetMapping("/findAll")
     public Result findAll(){
         List<Product> productList = productMapper.selectList(null);
@@ -44,6 +48,7 @@ public class AdminProductController {
      * @param product 商品实体类
      * @return 统一返回体
      */
+    @ApiOperation("添加商品")
     @PostMapping("/addProduct")
     public Result addProduct(@RequestBody @Validated Product product){
       log.info("product:[{}]",product);
@@ -59,6 +64,8 @@ public class AdminProductController {
      * @param jsonObject
      * @return
      */
+    @ApiOperation("删除商品")
+    @PostMapping("/deleteProduct")
     public Result deleteProduct(@RequestBody JSONObject jsonObject){
         Integer productId = (Integer)jsonObject.get("productId");
         String productName = (String)jsonObject.get("productName");
@@ -75,6 +82,8 @@ public class AdminProductController {
      * @param product
      * @return
      */
+    @ApiOperation("编辑商品信息")
+    @PostMapping("/editProduct")
     public Result editProduct(@RequestBody Product product){
         if (product.getProductId()!=null){
             productMapper.updateById(product);
@@ -88,6 +97,7 @@ public class AdminProductController {
      * @param jsonObject
      * @return 统一返回体
      */
+    @ApiOperation("上架商品")
     @GetMapping("/onSafeProduct")
     public Result onSafeProduct(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:[{}]", jsonObject.toJSONString());
@@ -99,6 +109,7 @@ public class AdminProductController {
      * @param jsonObject
      * @return 统一返回体
      */
+    @ApiOperation("下架商品")
     @GetMapping("/unSafeProduct")
     public Result unSafeProduct(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:[{}]", jsonObject.toJSONString());
