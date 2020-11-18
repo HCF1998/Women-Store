@@ -12,21 +12,21 @@ import java.math.BigDecimal;
 public class ProductTest {
   @Autowired private ProductMapper productMapper;
 
-  @Test
-  public void addProduct() {
-    BigDecimal bigDecimal = new BigDecimal(99.8);
-    Product product =
-        new Product()
-            .builder()
-            .productCategory(1)
-            .productDetail("棉花")
-            .productImage("aa")
-            .productInventory(500)
-            .productName("花上衣")
-            .productPrice(bigDecimal)
-            .productSize("XL,X")
-            .productStatus(1)
-            .build();
-    productMapper.insert(product);
-  }
+//  @Test
+//  public void addProduct() {
+//    BigDecimal bigDecimal = new BigDecimal(99.8);
+//    Product product =
+//        new Product()
+//            .builder()
+//            .productCategory(1)
+//            .productDetail("棉花")
+//            .productImage("aa")
+//            .productInventory(500)
+//            .productName("花上衣")
+//            .productPrice(bigDecimal)
+//            .productSize("XL,X")
+//            .productStatus(1)
+//            .build();
+//    productMapper.insert(product);
+//  }
 }

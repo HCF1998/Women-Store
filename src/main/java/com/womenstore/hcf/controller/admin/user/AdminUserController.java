@@ -102,7 +102,7 @@ public class AdminUserController {
                 "成功解禁用户Id:"+jsonObject.get("userAcount"));
     }
 
-    private void getBanUser(@RequestBody JSONObject jsonObject) {
+    private void getBanUser(JSONObject jsonObject) {
         String userId = (String) jsonObject.get("userAcount");
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_Acount",userId);

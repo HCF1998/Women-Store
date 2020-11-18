@@ -36,7 +36,7 @@ public class Product {
     private Integer productCategory;
 
     @TableField(value = "product_Inventory")
-    private Integer productInventory;
+    private String productInventory;
 
     @TableField(value = "product_Size")
     private String productSize;

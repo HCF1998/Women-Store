@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api
 @RestController
@@ -49,15 +51,26 @@ public class GeneralProductController {
 
     /**
      * 商品详情
-     * @param jsonObject
+     * @param productId
      * @return
      */
     @ApiOperation("商品详情")
-    @GetMapping("/detail")
-    public Result detailProduct(@ApiParam("商品Id")@RequestBody JSONObject jsonObject){
-        log.info("jsonObject:[{}]",jsonObject.toString());
-        String productId = (String)jsonObject.get("productId");
+    @GetMapping("/detail/{productId}")
+    public Result detailProduct(@PathVariable(value = "productId")Integer productId){
+        log.info("productId:{}",productId);
         Product product = productMapper.selectById(productId);
-        return new Result(ResultCode.SUCCESS,product);
+        String[] productSizes = product.getProductSize().split(",");
+        String[] productInventories = product.getProductInventory().split(",");
+        if (!(productSizes.length ==productInventories.length)){
+            return new Result(ResultCode.ERROR,"商品库存及尺码对应错误");
+        }
+        Map<String,Integer> sizeAndInventory = new HashMap<>();
+        for (int i=0;i<productSizes.length;i++){
+            sizeAndInventory.put(productSizes[i],Integer.valueOf(productInventories[i]));
+        }
+        JSONObject productDetailJson = new JSONObject();
+        productDetailJson.put("product",product);
+        productDetailJson.put("sizeAndInventory",sizeAndInventory);
+        return new Result(ResultCode.SUCCESS,productDetailJson);
     }
 }

@@ -10,12 +10,17 @@ import com.womenstore.hcf.util.ResultCode;
 import com.womenstore.hcf.util.UuidCode;
 import com.womenstore.hcf.util.entity.Login;
 import com.womenstore.hcf.util.utilMapper.LoginMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 
+
+@Api
 @RestController
 @RequestMapping("/generalUser/user")
 @Slf4j
@@ -31,8 +36,9 @@ public class GeneralUserController {
      * @param userRegisterReq
      * @return
      */
+    @ApiOperation("注册用户接口")
     @PostMapping("/addUser")
-  public Result addUser(@RequestBody UserRegisterReq userRegisterReq) {
+  public Result addUser(@Valid UserRegisterReq userRegisterReq) {
     log.info("userRegisterReq:[{}]", userRegisterReq);
     String userRegisterAcount = userRegisterReq.getUserRegisterAcount();
     QueryWrapper<User> qwUser = new QueryWrapper<>();
@@ -61,8 +67,9 @@ public class GeneralUserController {
    * @param userLoginReq 登录实体
    * @return
    */
+  @ApiOperation("普通用户登录接口")
   @PostMapping("/userLogin")
-  public Result userLogin(@RequestBody UserLoginReq userLoginReq) {
+  public Result userLogin(@RequestBody @Valid UserLoginReq userLoginReq) {
     log.info("userLoginReq:[{}]", userLoginReq);
     String userLoginAcount = userLoginReq.getUserAcount();
     String userLoginPassword = userLoginReq.getUserPassword();
@@ -88,6 +95,7 @@ public class GeneralUserController {
     return new Result(200,"普通用户登陆","index.jsp");
   }
 
+  @ApiOperation("用户信息修改")
   @GetMapping("/editUser")
   public Result editUser(@RequestBody JSONObject jsonObject){
     log.info("jsonObject:[{}]",jsonObject.toString());
