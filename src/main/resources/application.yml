@@ -7,8 +7,8 @@ spring:
     username: root
     password: root
 
-#logging:
-#  level:
-#    root:warn
-#
+logging:
+  pattern:
+    console: "%d - %m%n"
+
 

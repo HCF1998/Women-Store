@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.product.ProductMapper;
 import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.product.Product;
+import com.womenstore.hcf.service.impl.ProductServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import io.swagger.annotations.Api;
@@ -23,11 +24,11 @@ import java.util.Map;
 @RequestMapping("/generalUser/product")
 @Slf4j
 public class GeneralProductController {
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private ProductServiceImpl productService;
 
     /**
      * 商品模糊查询
@@ -44,6 +45,7 @@ public class GeneralProductController {
         List<Product> findProducts = productMapper.selectList(qwSearchProductName);
         if (findProducts.size()==0){
             String noneProduct = "所查询商品不存在";
+            log.error("模糊查询商品:["+searchProductName+"]不存在");
             return new Result(ResultCode.BAD_REQUEST,noneProduct);
         }
         return new Result(ResultCode.SUCCESS,findProducts);
@@ -58,7 +60,8 @@ public class GeneralProductController {
     @GetMapping("/detail/{productId}")
     public Result detailProduct(@PathVariable(value = "productId")Integer productId){
         log.info("productId:{}",productId);
-        Product product = productMapper.selectById(productId);
+//        Product product = productMapper.selectById(productId);
+        Product product = productService.getById(productId);
         String[] productSizes = product.getProductSize().split(",");
         String[] productInventories = product.getProductInventory().split(",");
         if (!(productSizes.length ==productInventories.length)){
