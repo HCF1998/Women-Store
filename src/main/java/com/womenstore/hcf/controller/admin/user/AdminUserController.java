@@ -5,16 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.entity.user.User;
+import com.womenstore.hcf.service.impl.UserServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +25,9 @@ public class AdminUserController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
     /**
      * 遍历用户
      * @return
@@ -34,7 +35,7 @@ public class AdminUserController {
     @ApiOperation("遍历用户")
     @GetMapping("/findAll")
     public Result finfAll(){
-        List<User> userList = userMapper.selectList(null);
+        List<User> userList = userServiceImpl.list();
         log.info("userList:{}",userList);
         return new Result(userList);
     }
@@ -45,13 +46,15 @@ public class AdminUserController {
      * @return
      */
     @ApiOperation("修改用户权限")
-    @GetMapping("/changeUserPriority")
+    @PostMapping("/changeUserPriority")
     public Result changeUserPriority(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:{}", jsonObject);
         String changPriorityId = (String) jsonObject.get("userId");
         Integer changPriorityValue = (Integer) jsonObject.get("priorityValue");
-        User changPriorityUser = userMapper.selectById(changPriorityId);
+//        User changPriorityUser = userMapper.selectById(changPriorityId);
+        User changPriorityUser = userServiceImpl.getById(changPriorityId);
         changPriorityUser.setUserPriority(changPriorityValue);
+        userServiceImpl.updateById(changPriorityUser);
         if (changPriorityValue == 1) {
             return new Result(200, "修改用户:" + changPriorityId + "权限为管理员", null);
         } else if (changPriorityValue == 0) {
