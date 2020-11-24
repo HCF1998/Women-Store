@@ -2,8 +2,6 @@ package com.womenstore.hcf.controller.generaluser.product;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.womenstore.hcf.dao.product.ProductMapper;
-import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.service.impl.ProductServiceImpl;
 import com.womenstore.hcf.util.Result;
@@ -26,8 +24,6 @@ import java.util.Map;
 public class GeneralProductController {
 
     @Autowired
-    private ProductMapper productMapper;
-    @Autowired
     private ProductServiceImpl productService;
 
     /**
@@ -42,7 +38,7 @@ public class GeneralProductController {
         String searchProductName =(String)jsonObject.get("searchProductName");
         QueryWrapper<Product> qwSearchProductName = new QueryWrapper<>();
         qwSearchProductName.like("product_Name",searchProductName);
-        List<Product> findProducts = productMapper.selectList(qwSearchProductName);
+        List<Product> findProducts = productService.list(qwSearchProductName);
         if (findProducts.size()==0){
             String noneProduct = "所查询商品不存在";
             log.error("模糊查询商品:["+searchProductName+"]不存在");

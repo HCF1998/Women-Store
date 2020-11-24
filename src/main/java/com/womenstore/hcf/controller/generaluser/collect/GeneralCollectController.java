@@ -3,11 +3,10 @@ package com.womenstore.hcf.controller.generaluser.collect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.womenstore.hcf.dao.collect.CollectMapper;
-import com.womenstore.hcf.dao.product.ProductMapper;
-import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.collect.Collect;
 import com.womenstore.hcf.entity.product.Product;
+import com.womenstore.hcf.service.impl.CollectServiceImpl;
+import com.womenstore.hcf.service.impl.ProductServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import io.swagger.annotations.Api;
@@ -30,50 +29,47 @@ import java.util.List;
 @RequestMapping("/generalUser/collect")
 public class GeneralCollectController {
     @Autowired
-    private CollectMapper collectMapper;
+    private CollectServiceImpl collectServiceImpl;
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private ProductMapper productMapper;
+    private ProductServiceImpl productServiceImpl;
 
   /**
-   * 收藏商品
-   *
+   * 添加商品收藏
    * @param jsonObject
    * @return
    */
   @ApiOperation("添加商品收藏")
   @PostMapping("/addCollect")
-  public Result addCollect(@ApiParam("包含userId,productId") @RequestBody JSONObject jsonObject) {
+  public Result addCollect(@RequestBody JSONObject jsonObject) {
         log.info("jsonObject:[{}]");
         Integer userId = (Integer)jsonObject.get("userId");
         Integer productId = (Integer)jsonObject.get("productId");
         Date addCollectDate = new Date();
         Collect addCollect = new Collect();
-        Product product = productMapper.selectById(productId);
+        Product product = productServiceImpl.getById(productId);
 
         addCollect.setCollectTime(addCollectDate);
         addCollect.setUserId(userId);
         addCollect.setProductId(productId);
         addCollect.setProductName(product.getProductName());
         addCollect.setProductPrice(product.getProductPrice());
-        collectMapper.insert(addCollect);
+        collectServiceImpl.save(addCollect);
 
         return new Result(ResultCode.SUCCESS,"收藏商品成功");
     }
 
     /**
-     * 查询所有商品收藏
+     * 查询商品收藏
      * @param userId
      * @return
      */
-    @ApiOperation("查询收藏")
+    @ApiOperation("查询商品收藏")
     @GetMapping("/findAllCollect/{userId}")
-    public Result findAllCollect(@ApiParam("用户Id") @PathVariable("userId")Integer userId){
+    public Result findAllCollect(@PathVariable("userId")Integer userId){
         log.info("userId:[{}]",userId);
         QueryWrapper qwCollect = new QueryWrapper();
         qwCollect.eq("user_Id",userId);
-        List<Collect> collectList = collectMapper.selectList(qwCollect);
+        List<Collect> collectList = collectServiceImpl.list(qwCollect);
         if (collectList!=null){
             return new Result(ResultCode.SUCCESS,collectList);
         }else {
@@ -81,11 +77,37 @@ public class GeneralCollectController {
         }
     }
 
+    /**
+     * 取消收藏
+     * @param collectId
+     * @return
+     */
     @ApiOperation("取消收藏")
     @GetMapping("deleteCollect/{collectId}")
-    public Result deleteCollect(@ApiParam("收藏记录Id")@PathVariable("collectId")Integer collectId){
-        collectMapper.deleteById(collectId);
+    public Result deleteCollect(@PathVariable("collectId")Integer collectId){
+        collectServiceImpl.removeById(collectId);
         return new Result(ResultCode.SUCCESS,"取消成功");
+    }
+
+    /**
+     * 模糊查询所收藏的商品
+     * @param jsonObject
+     * @return
+     */
+    @ApiOperation("模糊查询所收藏的商品")
+    @PostMapping("/searchCollect")
+    public Result searchCollect(@RequestBody JSONObject jsonObject){
+        String searchProductName = (String)jsonObject.get("searchProductName");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("product_Name",searchProductName);
+        List<Product> searchLists = collectServiceImpl.list(queryWrapper);
+        if (searchLists.size()==0){
+            return new Result(ResultCode.SUCCESS,"暂未收藏相关商品");
+        }else {
+            JSONObject returnSearchList = new JSONObject();
+            returnSearchList.put("searchLists",searchLists);
+            return new Result(ResultCode.SUCCESS,returnSearchList);
+        }
     }
 
 }

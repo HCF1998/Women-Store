@@ -1,10 +1,10 @@
 package com.womenstore.hcf.controller.generaluser.user;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.womenstore.hcf.dao.user.UserMapper;
 import com.womenstore.hcf.entity.user.User;
 import com.womenstore.hcf.requestentity.user.UserLoginReq;
 import com.womenstore.hcf.requestentity.user.UserRegisterReq;
+import com.womenstore.hcf.service.impl.UserServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import com.womenstore.hcf.util.UuidCode;
@@ -27,7 +27,7 @@ import javax.validation.Valid;
 public class GeneralUserController {
 
   @Autowired
-  private UserMapper userMapper;
+  private UserServiceImpl userServiceImpl;
 
   @Autowired
   private LoginMapper loginMapper;
@@ -43,7 +43,7 @@ public class GeneralUserController {
     String userRegisterAcount = userRegisterReq.getUserRegisterAcount();
     QueryWrapper<User> qwUser = new QueryWrapper<>();
     qwUser.eq("user_Acount", userRegisterAcount);
-    User hadUserRegister = userMapper.selectOne(qwUser);
+    User hadUserRegister = userServiceImpl.getOne(qwUser);
     if (hadUserRegister != null) {
       return new Result(ResultCode.BAD_REQUEST, "该账号已被注册");
     } else {
@@ -55,7 +55,7 @@ public class GeneralUserController {
         user.setUserAcount(userRegisterAcount);
         user.setUserPassword(userRegisterReq.getUserRegisterPassword());
         user.setUserPriority(0);
-        userMapper.insert(user);
+        userServiceImpl.save(user);
         return new Result(ResultCode.SUCCESS, "已成功注册该账号:" + userRegisterAcount);
       }
     }
@@ -75,7 +75,7 @@ public class GeneralUserController {
     String userLoginPassword = userLoginReq.getUserPassword();
     QueryWrapper<User> qw = new QueryWrapper<>();
     qw.eq("user_Acount", userLoginAcount);
-    User hadUser = userMapper.selectOne(qw);
+    User hadUser = userServiceImpl.getOne(qw);
     if (hadUser != null && StringUtils.equals(hadUser.getUserPassword(), userLoginPassword)) {
       if (hadUser.getUserStatus()==0){
         return new Result(405,"该账号已被封禁，禁止登陆",null);
@@ -110,6 +110,24 @@ public class GeneralUserController {
     return new Result(ResultCode.SUCCESS,"更新信息成功");
   }
 
+  @ApiOperation("用户密码修改")
+  @PostMapping("/editPassword")
+  public Result editPassword(@RequestBody JSONObject jsonObject){
+    log.info("jsonObject:[{}]");
+    User user = userServiceImpl.getById((String)jsonObject.get("userId"));
+    String oldPassword = (String)jsonObject.get("oldPassword");
+    String newPassword = (String)jsonObject.get("newPassword");
+    String confirmPassword = (String)jsonObject.get("confirmPassword");
+    if (!StringUtils.equals(user.getUserPassword(),oldPassword)){
+      return new Result(ResultCode.ERROR,"账户当前密码不正确");
+    }else {
+      if (!StringUtils.equals(newPassword,confirmPassword)){
+        return new Result(ResultCode.ERROR,"新密码和确认密码不一致");
+      }
+      user.setUserPassword(confirmPassword);
+      return new Result(ResultCode.SUCCESS,"修改密码成功");
+    }
+  }
 
   /**
    * 校验用户是否登录
@@ -125,4 +143,6 @@ public class GeneralUserController {
     }
     return true;
   }
+
+
 }

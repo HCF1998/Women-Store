@@ -1,6 +1,5 @@
 package com.womenstore.hcf.config;
 
-import com.baomidou.mybatisplus.extension.exceptions.ApiException;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
