@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ * 管理后台用户controller
+ */
 @Api
 @RestController
 @RequestMapping("/admin/user")
 @Slf4j
 public class AdminUserController {
-
-  @Autowired private UserMapper userMapper;
 
   @Autowired private UserServiceImpl userServiceImpl;
 
@@ -50,6 +51,7 @@ public class AdminUserController {
     String changPriorityId = (String) jsonObject.get("userId");
     Integer changPriorityValue = (Integer) jsonObject.get("priorityValue");
     User changPriorityUser = userServiceImpl.getById(changPriorityId);
+    //更改权限
     changPriorityUser.setUserPriority(changPriorityValue);
     userServiceImpl.updateById(changPriorityUser);
     if (changPriorityValue == 1) {

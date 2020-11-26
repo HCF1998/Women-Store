@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.womenstore.hcf.dao.product.ProductinventorysMapper">
+  <resultMap id="BaseResultMap" type="com.womenstore.hcf.entity.product.Productinventorys">
+    <!--@mbg.generated-->
+    <!--@Table productinventorys-->
+    <id column="productInventorys_Id" jdbcType="INTEGER" property="productinventorysId" />
+    <result column="product_Id" jdbcType="INTEGER" property="productId" />
+    <result column="product_Name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_Size" jdbcType="VARCHAR" property="productSize" />
+    <result column="product_Inventory" jdbcType="INTEGER" property="productInventory" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    productInventorys_Id, product_Id, product_Name, product_Size, product_Inventory
+  </sql>
+</mapper>

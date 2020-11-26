@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用户商品收藏类
+ * 用户商品收藏类controller
  */
 
 @Api

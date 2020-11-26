@@ -8,7 +8,6 @@ import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 普通用户商品controller
+ */
 @Api
 @RestController
 @RequestMapping("/generalUser/product")
@@ -24,7 +26,7 @@ import java.util.Map;
 public class GeneralProductController {
 
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductServiceImpl productServiceImpl;
 
     /**
      * 商品模糊查询
@@ -33,12 +35,12 @@ public class GeneralProductController {
      */
     @ApiOperation("商品模糊查询")
     @PostMapping("/searchProduct")
-    public Result searchProduct(@ApiParam("商品模糊字段") @RequestBody JSONObject jsonObject){
+    public Result searchProduct(@RequestBody JSONObject jsonObject){
         log.info("jsonObject:[{}]",jsonObject.toString());
         String searchProductName =(String)jsonObject.get("searchProductName");
         QueryWrapper<Product> qwSearchProductName = new QueryWrapper<>();
         qwSearchProductName.like("product_Name",searchProductName);
-        List<Product> findProducts = productService.list(qwSearchProductName);
+        List<Product> findProducts = productServiceImpl.list(qwSearchProductName);
         if (findProducts.size()==0){
             String noneProduct = "所查询商品不存在";
             log.error("模糊查询商品:["+searchProductName+"]不存在");
@@ -56,8 +58,7 @@ public class GeneralProductController {
     @GetMapping("/detail/{productId}")
     public Result detailProduct(@PathVariable(value = "productId")Integer productId){
         log.info("productId:{}",productId);
-//        Product product = productMapper.selectById(productId);
-        Product product = productService.getById(productId);
+        Product product = productServiceImpl.getById(productId);
         String[] productSizes = product.getProductSize().split(",");
         String[] productInventories = product.getProductInventory().split(",");
         if (!(productSizes.length ==productInventories.length)){

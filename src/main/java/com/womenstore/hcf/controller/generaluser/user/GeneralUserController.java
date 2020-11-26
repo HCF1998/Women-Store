@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
+/**
+ * 普通用户类controller
+ */
 @Api
 @RestController
 @RequestMapping("/generalUser/user")

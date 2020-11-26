@@ -2,11 +2,13 @@ package com.womenstore.hcf.util;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.http.HttpStatus;
 
 @ToString
 @Getter
 
+/**
+ * 统一返回体枚举类
+ */
 public enum ResultCode {
     SUCCESS(200,"操作成功"),
     FAILED(404, "响应失败"),

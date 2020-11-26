@@ -3,6 +3,10 @@ package com.womenstore.hcf.util;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * 统一返回体
+ * @param <T>
+ */
 @Getter
 @ToString
 public class Result<T> {
