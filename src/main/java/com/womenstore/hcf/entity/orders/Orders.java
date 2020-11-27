@@ -36,7 +36,7 @@ public class Orders {
     private BigDecimal orderSum;
 
     @TableField(value = "order_ProductNum")
-    private Integer orderProductnum;
+    private Integer orderProductNum;
 
     @TableField(value = "user_Id")
     private Integer userId;

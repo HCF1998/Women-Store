@@ -109,6 +109,11 @@ public class GeneralUserController {
     if (!isLogin){
       return new Result(ResultCode.FAILED,"请先登录");
     }
+    User user = userServiceImpl.getById((Integer)jsonObject.get("userId"));
+    user.setUserAddress((String)jsonObject.get("userAddress"));
+    user.setUserPhone((String)jsonObject.get("userPhone"));
+    user.setUserName((String)jsonObject.get("userName"));
+    userServiceImpl.save(user);
     return new Result(ResultCode.SUCCESS,"更新信息成功");
   }
 
