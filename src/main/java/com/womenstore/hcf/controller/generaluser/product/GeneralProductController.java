@@ -3,6 +3,8 @@ package com.womenstore.hcf.controller.generaluser.product;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.entity.product.Product;
+import com.womenstore.hcf.entity.product.Productinventorys;
+import com.womenstore.hcf.service.impl.ProductInventoryServiceImpl;
 import com.womenstore.hcf.service.impl.ProductServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
@@ -12,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 普通用户商品controller
@@ -27,6 +27,9 @@ public class GeneralProductController {
 
     @Autowired
     private ProductServiceImpl productServiceImpl;
+
+    @Autowired
+    private ProductInventoryServiceImpl productInventoryServiceImpl;
 
     /**
      * 商品模糊查询
@@ -59,18 +62,14 @@ public class GeneralProductController {
     public Result detailProduct(@PathVariable(value = "productId")Integer productId){
         log.info("productId:{}",productId);
         Product product = productServiceImpl.getById(productId);
-        String[] productSizes = product.getProductSize().split(",");
-        String[] productInventories = product.getProductInventory().split(",");
-        if (!(productSizes.length ==productInventories.length)){
-            return new Result(ResultCode.ERROR,"商品库存及尺码对应错误");
-        }
-        Map<String,Integer> sizeAndInventory = new HashMap<>();
-        for (int i=0;i<productSizes.length;i++){
-            sizeAndInventory.put(productSizes[i],Integer.valueOf(productInventories[i]));
-        }
+
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("product_Id",productId);
+        List<Productinventorys> getInventorys =
+                productInventoryServiceImpl.list(queryWrapper);
         JSONObject productDetailJson = new JSONObject();
         productDetailJson.put("product",product);
-        productDetailJson.put("sizeAndInventory",sizeAndInventory);
+        productDetailJson.put("inventory",getInventorys);
         return new Result(ResultCode.SUCCESS,productDetailJson);
     }
 }

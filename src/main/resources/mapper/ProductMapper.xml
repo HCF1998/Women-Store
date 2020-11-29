@@ -10,13 +10,11 @@
     <result column="product_Image" jdbcType="VARCHAR" property="productImage" />
     <result column="product_Detail" jdbcType="VARCHAR" property="productDetail" />
     <result column="product_Category" jdbcType="INTEGER" property="productCategory" />
-    <result column="product_Inventory" jdbcType="VARCHAR" property="productInventory" />
-    <result column="product_Size" jdbcType="VARCHAR" property="productSize" />
     <result column="product_Status" jdbcType="INTEGER" property="productStatus" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    product_Id, product_Name, product_Price, product_Image, product_Detail, product_Category, 
-    product_Inventory, product_Size, product_Status
+    product_Id, product_Name, product_Price, product_Image, product_Detail,
+    product_Category, product_Status
   </sql>
 </mapper>

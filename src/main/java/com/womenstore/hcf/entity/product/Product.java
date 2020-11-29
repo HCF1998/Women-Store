@@ -35,12 +35,6 @@ public class Product {
     @TableField(value = "product_Category")
     private Integer productCategory;
 
-    @TableField(value = "product_Inventory")
-    private String productInventory;
-
-    @TableField(value = "product_Size")
-    private String productSize;
-
     @TableField(value = "product_Status")
     private Integer productStatus;
 }

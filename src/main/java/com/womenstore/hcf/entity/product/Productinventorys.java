@@ -29,4 +29,6 @@ public class Productinventorys {
 
     @TableField(value = "product_Inventory")
     private Integer productInventory;
+
+
 }

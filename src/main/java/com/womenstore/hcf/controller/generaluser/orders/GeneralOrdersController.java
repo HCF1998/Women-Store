@@ -1,9 +1,12 @@
 package com.womenstore.hcf.controller.generaluser.orders;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.womenstore.hcf.entity.orders.Orders;
 import com.womenstore.hcf.entity.product.Product;
+import com.womenstore.hcf.entity.product.Productinventorys;
 import com.womenstore.hcf.service.impl.OrdersServiceImpl;
+import com.womenstore.hcf.service.impl.ProductInventoryServiceImpl;
 import com.womenstore.hcf.service.impl.ProductServiceImpl;
 import com.womenstore.hcf.util.Result;
 import com.womenstore.hcf.util.ResultCode;
@@ -29,6 +32,8 @@ public class GeneralOrdersController {
 
   @Autowired private ProductServiceImpl productServiceImpl;
 
+  @Autowired private ProductInventoryServiceImpl productInventoryServiceImpl;
+
   /**
    * 创建新订单
    *
@@ -44,10 +49,25 @@ public class GeneralOrdersController {
     Date orderCreatetime = new Date(System.currentTimeMillis());
     Integer orderProductNum = (Integer) jsonObject.get("orderProductNum");
 
+
+
     /** 获取商品信息 */
     Integer productId = (Integer) jsonObject.get("productId");
     Product product = productServiceImpl.getById(productId);
 
+    /**
+     * 更新商品库存
+     */
+    QueryWrapper queryWrapper = new QueryWrapper();
+    queryWrapper.eq("product_Size",(String)jsonObject.get("productSize"));
+    queryWrapper.eq("product_Id",productId);
+    Productinventorys productinventorys =
+            productInventoryServiceImpl.getOne(queryWrapper);
+    if (productinventorys.getProductInventory()<orderProductNum){
+      return new Result(ResultCode.SUCCESS,"库存不足");
+    }
+    productinventorys.setProductInventory(productinventorys.getProductInventory()-orderProductNum);
+    productInventoryServiceImpl.updateById(productinventorys);
     /** 计算订单金额 */
     BigDecimal orderSum = product.getProductPrice().multiply(new BigDecimal(orderProductNum));
 
@@ -66,6 +86,7 @@ public class GeneralOrdersController {
             .productId(productId)
             .productName(product.getProductName())
             .productPrice(product.getProductPrice())
+            .productSize((String)jsonObject.get("productSize"))
             .build();
 
     ordersServiceImpl.save(newOrder);

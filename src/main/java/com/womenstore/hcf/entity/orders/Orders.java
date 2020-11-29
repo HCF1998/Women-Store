@@ -55,4 +55,7 @@ public class Orders {
 
     @TableField(value = "product_Price")
     private BigDecimal productPrice;
+
+    @TableField(value = "product_Size")
+    private String productSize;
 }

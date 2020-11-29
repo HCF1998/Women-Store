@@ -2,7 +2,7 @@ package com.womenstore.hcf.controller.admin.product;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.womenstore.hcf.dao.product.ProductMapper;
+
 import com.womenstore.hcf.entity.product.Product;
 import com.womenstore.hcf.entity.product.Productinventorys;
 import com.womenstore.hcf.service.impl.ProductInventoryServiceImpl;
@@ -13,14 +13,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * 商品controller
- */
+/** 商品controller */
 @Api
 @RestController
 @RequestMapping("/admin/product")
@@ -58,37 +56,48 @@ public class AdminProductController {
   /**
    * 添加商品
    *
-   * @param product 商品实体类
+   * @param
    * @return 统一返回体
    */
   @ApiOperation("添加商品")
   @PostMapping("/addProduct")
-  public Result addProduct(@RequestBody @Validated Product product) {
-    log.info("product:[{}]", product);
-    if (product != null) {
-      productServiceImpl.save(product);
-      String productName = product.getProductName();
+  public Result addProduct(@RequestBody JSONObject jsonObject) {
+    log.info("jsonObject:[{}]", jsonObject);
+    Product product =
+        new Product()
+            .builder()
+            .productName((String) jsonObject.get("productName"))
+            .productPrice(new BigDecimal((Double)jsonObject.get("productPrice")))
+            .productStatus((Integer) jsonObject.get("productStatus"))
+            .productImage((String) jsonObject.get("productImage"))
+            .productCategory((Integer) jsonObject.get("productCategory"))
+            .productDetail((String) jsonObject.get("productDetail"))
+            .build();
+    productServiceImpl.save(product);
+    QueryWrapper queryWrapper = new QueryWrapper();
+    queryWrapper.eq("product_Name", (String) jsonObject.get("productName"));
+    product = productServiceImpl.getOne(queryWrapper);
 
-      QueryWrapper queryWrapper = new QueryWrapper();
-      queryWrapper.eq("product_Name", productName);
-      Product returnProduct = productServiceImpl.getOne(queryWrapper);
-      //切割商品尺码及库存并存入库存子表
-      String[] productSizes = returnProduct.getProductSize().split(",");
-      String[] productInventories = returnProduct.getProductInventory().split(",");
-      for (int i = 0; i < productSizes.length; i++) {
-        Productinventorys productinventorys =
+    /** 处理尺码和库存 */
+    String sizes = (String) jsonObject.get("size");
+    String productinventorys = (String) jsonObject.get("productinventory");
+    String[] sizeLists = sizes.split(",");
+    String[] productinventoryLists = productinventorys.split(",");
+
+    if (sizeLists.length == productinventoryLists.length) {
+      for (int i = 0; i < sizeLists.length; i++) {
+        Productinventorys productinventory =
             new Productinventorys()
                 .builder()
-                .productId(returnProduct.getProductId())
-                .productName(returnProduct.getProductName())
-                .productSize(productSizes[i])
-                .productInventory(Integer.valueOf(productInventories[i]))
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .productSize(sizeLists[i])
+                .productInventory(Integer.valueOf(productinventoryLists[i]))
                 .build();
-        productInventoryServiceImpl.save(productinventorys);
+        productInventoryServiceImpl.save(productinventory);
       }
-      return new Result(ResultCode.SUCCESS, "添加商品成功");
     }
-    return null;
+    return new Result(ResultCode.SUCCESS, "添加商品成功");
   }
 
   /**

@@ -10,17 +10,19 @@
     <result column="order_Status" jdbcType="INTEGER" property="orderStatus" />
     <result column="order_PayTime" jdbcType="TIMESTAMP" property="orderPaytime" />
     <result column="order_Sum" jdbcType="DECIMAL" property="orderSum" />
-    <result column="order_ProductNum" jdbcType="INTEGER" property="orderProductnum" />
+    <result column="order_ProductNum" jdbcType="INTEGER" property="orderProductNum" />
     <result column="user_Id" jdbcType="INTEGER" property="userId" />
     <result column="user_Phone" jdbcType="VARCHAR" property="userPhone" />
     <result column="user_Address" jdbcType="VARCHAR" property="userAddress" />
     <result column="product_Id" jdbcType="INTEGER" property="productId" />
     <result column="product_Name" jdbcType="VARCHAR" property="productName" />
     <result column="product_Price" jdbcType="DECIMAL" property="productPrice" />
+    <result column="product_Size" jdbcType="VARCHAR" property="productName" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     order_Id, order_No, order_CreateTime, order_Status, order_PayTime, order_Sum, order_ProductNum, 
-    user_Id, user_Phone, user_Address, product_Id, product_Name, product_Price
+    user_Id, user_Phone, user_Address, product_Id, product_Name, product_Price,
+    product_Size
   </sql>
 </mapper>
